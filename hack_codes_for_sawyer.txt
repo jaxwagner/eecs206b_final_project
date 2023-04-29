@@ -1,0 +1,5 @@
+rosrun intera_interface enable_robot.py -e
+
+./intera.sh alice.local
+
+roslaunch intera_examples sawyer_tuck.launch
