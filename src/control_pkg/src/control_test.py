@@ -37,7 +37,7 @@ data = np.array([0,0,0])
 
 def main():
 	# -0.03 should be our z-desired point
-	ball_pos = np.array([0.587, 0.199, -0.03])#### should be obtained
+	ball_pos = np.array([0.587, 0.199, -0.015])#### should be obtained
 
 	right_gripper = robot_gripper.Gripper('right_gripper')	
 	rospy.Subscriber("grasp_info", grasp_msg, callback)
