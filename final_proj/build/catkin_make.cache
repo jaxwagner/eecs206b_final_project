@@ -1,0 +1,2 @@
+control_pkg:cv_pkg
+-DCATKIN_DEVEL_PREFIX=/home/cc/ee106b/sp23/class/ee106b-abv/ros_workspace/final_proj/devel -DCMAKE_INSTALL_PREFIX=/home/cc/ee106b/sp23/class/ee106b-abv/ros_workspace/final_proj/install -G Unix Makefiles

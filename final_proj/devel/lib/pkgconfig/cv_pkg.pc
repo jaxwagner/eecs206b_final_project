@@ -1,0 +1,8 @@
+prefix=/home/cc/ee106b/sp23/class/ee106b-abv/ros_workspace/final_proj/devel
+
+Name: cv_pkg
+Description: Description of cv_pkg
+Version: 0.0.0
+Cflags: -I/home/cc/ee106b/sp23/class/ee106b-abv/ros_workspace/final_proj/devel/include -I/home/cc/ee106b/sp23/class/ee106b-abv/ros_workspace/final_proj/src/cv_pkg/include
+Libs: -L${prefix}/lib -lcv_pkg
+Requires: geometry_msgs roscpp rospy std_msgs realsense2_camera
