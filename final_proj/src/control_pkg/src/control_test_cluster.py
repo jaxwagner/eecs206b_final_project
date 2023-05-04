@@ -38,7 +38,7 @@ NUM_JOINTS = 7
 class ControllerNode:
 	def __init__(self):
 		self.data = np.array([0,0,0])
-		self.camera_center = np.array([0.525, 0.072, -0.015])#### z is bottom point
+		self.camera_center = np.array([0.545, 0.086, -0.015])#### z is bottom point
 		# self.camera_center = np.array([0.525, 0.072, -0.005])#### should be obtained
 
 	def main(self):
@@ -48,9 +48,9 @@ class ControllerNode:
 
 		points = []
 		
-		for i in range(500):
+		for i in range(250):
 			rospy.sleep(0.05)
-			points.append(tuple([round(self.data[0],4), round(self.data[1],4), round(self.data[2], 4)]))
+			points.append(tuple([round(self.data[0],3), round(self.data[1],3), round(self.data[2], 1)]))
 		
 		grid = defaultdict(list)
 		for curr_point in points:
@@ -60,33 +60,45 @@ class ControllerNode:
 				distance_dict[other_point] = distance
 			#Get distance of all the points from this curr_point and sort it
 			output = sorted(distance_dict.items(), key=lambda x: x[1])
+			#print(output)
 			for point_distance in output:
 				point = point_distance[0]
 				distance = point_distance[1]
 				#If distance is less than some threshold, consider it as if they are in the same cluster.
-				if distance < 0.006:
+				if distance < 0.01:
 					grid[curr_point].append(point)
 				else:
 					break
-
+		#print(grid)
 		most_points_cluster = sorted(grid.items(), key=lambda x: len(x[1]), reverse = True)
 		x = []
 		y = []
 		desired_point = most_points_cluster[0]
-		theta = 0
+		theta_map = {}
+		#print(desired_point)
+
 		for other_point in desired_point[1]:
 			x.append(other_point[0])
 			y.append(other_point[1])
-			theta += other_point[2]
-
-		#These are the points within the center point that has the most number of points in the cluster. So blue points are neighbor points that are within the cluster
+			if other_point[2] in theta_map:
+				theta_map[other_point[2]] +=1
+			else:
+				theta_map[other_point[2]] = 1
+		sorted_theta_map = sorted(theta_map.items(), key=lambda x: x[1], reverse = True)[0]
+		print(sorted_theta_map)
+		theta = sorted_theta_map[0]
 		plt.scatter(x, y)
-		#Red point is a cluster center. For now it's just a point, but
-		#TODO: Make this a centroid of the cluster, not just the point with most number of clustered points
 		plt.plot(desired_point[0][0], desired_point[0][1],'ro')
 		plt.show() 
-		theta = theta/len(desired_point[1])
+	
+
+		#These are the points within the center point that has the most number of points in the cluster. So blue points are neighbor points that are within the cluster
+		
+		#Red point is a cluster center. For now it's just a point, but
+		#TODO: Make this a centroid of the cluster, not just the point with most number of clustered points
+		
 		print(desired_point[0][0], desired_point[0][1], theta)
+		
 		
 		inc = np.array([desired_point[0][0], -desired_point[0][1], 0])
 
@@ -138,6 +150,8 @@ class ControllerNode:
 				traceback.print_exc()
 			else:
 				break
+
+		right_gripper.open()
 
 	def callback(self, message):
 		# print(message)

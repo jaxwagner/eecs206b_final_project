@@ -36,10 +36,12 @@ class our_node(object):
         self.current_rgb_ts = None
         self.current_depth_ts = None
 
+        self.plotting = False
+
         # orange true = 43, 98.4, 98.8
         # self.orange_lower = np.array([10, 100, 100])
         # self.orange_upper = np.array([25, 255, 255])
-        self.orange_lower = np.array([10, 60, 60])
+        self.orange_lower = np.array([9, 50, 50])
         self.orange_upper = np.array([50, 255, 255])
 
         self.purple_lower = np.array([250/2, 50, 50])
@@ -167,6 +169,7 @@ class our_node(object):
         if not failed:
             best_grasp = ((contours_list[0][3][0]- x_center, contours_list[0][3][1]- y_center), contours_list[0][4])
 
+            plot_xy = (0,0)
             for c in contours_list:
                 dist_to_ball = c[0]
 
@@ -178,19 +181,21 @@ class our_node(object):
                 if perimeter > min_perimeter and dist_func < best_dist and dist_func > 0:
                     best_dist = dist_func
                     grasp_vs_center = (c[3][0] - x_center, c[3][1] - y_center)
+                    plot_xy = (c[3][0], c[3][1])
                     best_grasp = (grasp_vs_center, c[4])
 
-            ## testing code to see if lines make sense
-            start_point = (best_grasp[0][0], best_grasp[0][1])
-            print(start_point)
-            n = int(perimeter)*5
-            end_point = (int(best_grasp[0][0] + n), int(best_grasp[0][1] + n*best_grasp[1]))
-            thickness = 2
-            color = (255, 255, 0)
-            img = cv2.line(countour_image, start_point, end_point, color, thickness)
-            cv2.circle(img,(best_grasp[0][0],best_grasp[0][1]), 3, (0,0,255), -1)
-            #cv2.imshow('contour line onpython rgb', img)
-            #key = cv2.waitKey(0)
+            
+            if self.plotting: ## testing code to see if lines make sense
+                start_point = (plot_xy[0], plot_xy[1])
+                print(start_point)
+                n = int(perimeter)*5
+                end_point = (int(plot_xy[0] + n), int(plot_xy[1] + n*best_grasp[1]))
+                thickness = 2
+                color = (255, 255, 0)
+                img = cv2.line(countour_image, start_point, end_point, color, thickness)
+                cv2.circle(img,(plot_xy[0],plot_xy[1]), 3, (0,0,255), -1)
+                cv2.imshow('contour line onpython rgb', img)
+                key = cv2.waitKey(0)
 
         return best_grasp
 

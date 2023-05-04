@@ -41,9 +41,10 @@ data = np.array([0,0,0])
 def main():
 
 	right_gripper = robot_gripper.Gripper('right_gripper')
-	right_gripper.open()
+	right_gripper.calibrate()
 
 	rospy.sleep(3.0)
+	right_gripper.open()
 	# right_gripper.close()
 
 	# des = np.array([0.6, 0.2, 0.15])

@@ -119,7 +119,7 @@ class our_node(object):
                 cropped_image = img[cropped_top:cropped_bottom, crop_left:crop_right]
 
                 # Resize the cropped image to 32 by 64 pixels
-                resized_image = cv2.resize(cropped_image, (64, 36))
+                resized_image = cv2.resize(cropped_image, (256, 144))
 
                 
                 ## DEPTH CROPPING
@@ -130,7 +130,7 @@ class our_node(object):
                 d_bottom = d_top * 3
                 cropped_depth = depth[d_top:d_bottom, d_left:d_right]
 
-                resized_depth = cv2.resize(cropped_depth, (64, 36))
+                resized_depth = cv2.resize(cropped_depth, (256, 144))
 
                 self.img_resized = resized_image
                 self.depth_resized = resized_depth
